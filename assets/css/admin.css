@@ -1,0 +1,38 @@
+.skeel-filters {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	align-items: center;
+	margin: 16px 0;
+}
+
+.skeel-filters label {
+	display: flex;
+	gap: 6px;
+	align-items: center;
+}
+
+.skeel-timeline td:first-child {
+	white-space: nowrap;
+	width: 170px;
+}
+
+.skeel-source {
+	display: inline-block;
+	padding: 1px 8px;
+	border-radius: 10px;
+	background: #f0f0f1;
+	font-size: 12px;
+}
+
+.skeel-source-woocommerce { background: #efe6f7; }
+.skeel-source-heralda { background: #e7f2fb; }
+.skeel-source-proofblocks { background: #e8f5ea; }
+.skeel-source-agentwarden { background: #fdf0e1; }
+
+.skeel-vis-observed { color: #007017; font-weight: 600; }
+.skeel-vis-needs_events { color: #996800; font-weight: 600; }
+
+.skeel-pager .button + .button {
+	margin-left: 8px;
+}
