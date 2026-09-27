@@ -43,14 +43,14 @@ function skeel_portfolio_registry() {
 			'visibility' => 'observed',
 			'summary'    => __( 'Watermark settings changes.', 'sitekeel' ),
 		),
-		'agentwarden'                  => array(
-			'name'       => 'AgentWarden',
-			'file'       => 'agentwarden/agentwarden.php',
-			'constant'   => 'AGWD_VERSION',
-			'pro_file'   => 'agentwarden-pro/agentwarden-pro.php',
+		'tillkeeper'                  => array(
+			'name'       => 'Tillkeeper',
+			'file'       => 'tillkeeper/tillkeeper.php',
+			'constant'   => 'TLKP_VERSION',
+			'pro_file'   => 'tillkeeper-pro/tillkeeper-pro.php',
 			'pro_fs'     => '',
 			'visibility' => 'observed',
-			'summary'    => __( 'Changes made by AI agents (with AgentWarden Pro).', 'sitekeel' ),
+			'summary'    => __( 'Changes made by AI agents (with Tillkeeper Pro).', 'sitekeel' ),
 		),
 		'fettle'                       => array(
 			'name'       => 'Fettle',
