@@ -52,6 +52,15 @@ function skeel_portfolio_registry() {
 			'visibility' => 'observed',
 			'summary'    => __( 'Changes made by AI agents through store abilities.', 'sitekeel' ),
 		),
+		'storewhy'                     => array(
+			'name'       => 'StoreWhy',
+			'file'       => 'storewhy/storewhy.php',
+			'constant'   => 'STWY_VERSION',
+			'pro_file'   => 'storewhy-pro/storewhy-pro.php',
+			'pro_fs'     => 'stwyp_fs',
+			'visibility' => 'observed',
+			'summary'    => __( 'Shares the same change timeline; its sales dashboard shows these changes next to the numbers.', 'sitekeel' ),
+		),
 		'fettle'                       => array(
 			'name'       => 'Fettle',
 			'file'       => 'fettle/fettle.php',
