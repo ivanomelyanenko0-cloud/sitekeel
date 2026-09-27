@@ -46,9 +46,18 @@ function skeel_render_admin_page() {
 
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only tab switch.
 	$tab  = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'timeline';
-	$tabs = array(
-		'timeline'  => __( 'Timeline', 'sitekeel' ),
-		'portfolio' => __( 'Portfolio', 'sitekeel' ),
+	/**
+	 * Filters the tabs on the Sitekeel page. A tab added here is rendered by
+	 * the 'skeel_render_tab_{key}' action.
+	 *
+	 * @param array $tabs key => label.
+	 */
+	$tabs = (array) apply_filters(
+		'skeel_admin_tabs',
+		array(
+			'timeline'  => __( 'Timeline', 'sitekeel' ),
+			'portfolio' => __( 'Portfolio', 'sitekeel' ),
+		)
 	);
 	if ( ! isset( $tabs[ $tab ] ) ) {
 		$tab = 'timeline';
@@ -64,8 +73,10 @@ function skeel_render_admin_page() {
 		<?php
 		if ( 'portfolio' === $tab ) {
 			skeel_render_portfolio_tab();
-		} else {
+		} elseif ( 'timeline' === $tab ) {
 			skeel_render_timeline_tab();
+		} else {
+			do_action( 'skeel_render_tab_' . $tab );
 		}
 		?>
 	</div>
@@ -81,26 +92,23 @@ function skeel_render_timeline_tab() {
 		return;
 	}
 
-	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- read-only filters.
-	$source = isset( $_GET['source'] ) ? sanitize_key( wp_unslash( $_GET['source'] ) ) : '';
-	$days   = isset( $_GET['days'] ) ? absint( $_GET['days'] ) : 30;
-	$paged  = isset( $_GET['paged'] ) ? max( 1, absint( $_GET['paged'] ) ) : 1;
-	// phpcs:enable
-	$days     = in_array( $days, array( 1, 7, 30, 90 ), true ) ? $days : 30;
+	$filters = skeel_timeline_filters();
+	$source  = $filters['source'];
+	$days    = $filters['days'];
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only pagination.
+	$paged    = isset( $_GET['paged'] ) ? max( 1, absint( $_GET['paged'] ) ) : 1;
 	$per_page = 50;
 
-	$rows = cljournal_query(
-		array(
-			'after'  => gmdate( 'Y-m-d H:i:s', time() - $days * DAY_IN_SECONDS ),
-			'source' => $source,
-			'limit'  => $per_page + 1,
-			'offset' => ( $paged - 1 ) * $per_page,
-		)
-	);
+	$rows     = cljournal_query( skeel_timeline_query_args( $filters, $per_page + 1, ( $paged - 1 ) * $per_page ) );
 	$has_more = count( $rows ) > $per_page;
 	$rows     = array_slice( $rows, 0, $per_page );
 	?>
-	<p class="description"><?php esc_html_e( 'What changed on this site: WordPress, WooCommerce and CognitoLab plugins. No personal data is stored.', 'sitekeel' ); ?></p>
+	<p class="description">
+		<?php
+		/* translators: %d: number of days changes are kept. */
+		echo esc_html( sprintf( __( 'What changed on this site: WordPress, WooCommerce and CognitoLab plugins. No personal data is stored. Changes are kept for %d days.', 'sitekeel' ), skeel_retention_days() ) );
+		?>
+	</p>
 
 	<form method="get" class="skeel-filters">
 		<input type="hidden" name="page" value="sitekeel" />
@@ -117,14 +125,23 @@ function skeel_render_timeline_tab() {
 		<label>
 			<?php esc_html_e( 'Period', 'sitekeel' ); ?>
 			<select name="days">
-				<?php foreach ( array( 1, 7, 30, 90 ) as $d ) : ?>
+				<?php foreach ( skeel_timeline_periods() as $d ) : ?>
 					<?php /* translators: %d: number of days. */ ?>
 					<option value="<?php echo esc_attr( (string) $d ); ?>" <?php selected( $days, $d ); ?>><?php echo esc_html( sprintf( _n( 'Last %d day', 'Last %d days', $d, 'sitekeel' ), $d ) ); ?></option>
 				<?php endforeach; ?>
 			</select>
 		</label>
+		<label><input type="checkbox" name="important" value="1" <?php checked( $filters['important'] ); ?> /> <?php esc_html_e( 'Important changes only', 'sitekeel' ); ?></label>
 		<?php submit_button( __( 'Filter', 'sitekeel' ), 'secondary', '', false ); ?>
 	</form>
+	<?php
+	/**
+	 * Fires under the timeline filters, e.g. for an export button.
+	 *
+	 * @param array $filters Current filters: source, days, important.
+	 */
+	do_action( 'skeel_timeline_tools', $filters );
+	?>
 
 	<?php if ( empty( $rows ) ) : ?>
 		<p><?php esc_html_e( 'No changes recorded for this period yet.', 'sitekeel' ); ?></p>
@@ -148,7 +165,7 @@ function skeel_render_timeline_tab() {
 				$link  = skeel_object_edit_link( $row );
 				$actor = (int) $row['actor_id'] ? get_userdata( (int) $row['actor_id'] ) : false;
 				?>
-				<tr>
+				<tr class="<?php echo skeel_is_important( $row ) ? 'skeel-important' : ''; ?>">
 					<td><?php echo esc_html( get_date_from_gmt( $row['occurred_at'], get_option( 'date_format' ) . ' ' . get_option( 'time_format' ) ) ); ?></td>
 					<td><span class="skeel-source skeel-source-<?php echo esc_attr( $row['source'] ); ?>"><?php echo esc_html( $row['source'] ); ?></span></td>
 					<td>
@@ -173,6 +190,62 @@ function skeel_render_timeline_tab() {
 		<?php endif; ?>
 	</p>
 	<?php
+}
+
+/**
+ * @return int Days of history kept by the journal.
+ */
+function skeel_retention_days() {
+	return max( 1, (int) apply_filters( 'cljournal_retention_days', 90 ) );
+}
+
+/**
+ * @return int[] Periods offered in the timeline filter, never longer than the history kept.
+ */
+function skeel_timeline_periods() {
+	$keep    = skeel_retention_days();
+	$periods = array_filter(
+		array( 1, 7, 30, 90, 180, 365 ),
+		static function ( $d ) use ( $keep ) {
+			return $d <= $keep;
+		}
+	);
+	return array_values( $periods );
+}
+
+/**
+ * Timeline filters from the request (read-only view state).
+ *
+ * @return array{source: string, days: int, important: bool}
+ */
+function skeel_timeline_filters() {
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- read-only filters.
+	$source    = isset( $_REQUEST['source'] ) ? sanitize_key( wp_unslash( $_REQUEST['source'] ) ) : '';
+	$days      = isset( $_REQUEST['days'] ) ? absint( $_REQUEST['days'] ) : 30;
+	$important = ! empty( $_REQUEST['important'] );
+	// phpcs:enable
+
+	return array(
+		'source'    => $source,
+		'days'      => in_array( $days, skeel_timeline_periods(), true ) ? $days : 30,
+		'important' => $important,
+	);
+}
+
+/**
+ * @param array $filters From skeel_timeline_filters().
+ * @param int   $limit   Rows.
+ * @param int   $offset  Offset.
+ * @return array cljournal_query() args.
+ */
+function skeel_timeline_query_args( array $filters, $limit, $offset = 0 ) {
+	return array(
+		'after'  => gmdate( 'Y-m-d H:i:s', time() - $filters['days'] * DAY_IN_SECONDS ),
+		'source' => $filters['source'],
+		'events' => $filters['important'] ? array_keys( skeel_important_events() ) : array(),
+		'limit'  => $limit,
+		'offset' => $offset,
+	);
 }
 
 /**
@@ -245,4 +318,6 @@ function skeel_render_portfolio_tab() {
 		</tbody>
 	</table>
 	<?php
+
+	skeel_render_ai_status();
 }

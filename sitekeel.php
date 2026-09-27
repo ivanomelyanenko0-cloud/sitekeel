@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       Sitekeel
  * Plugin URI:        https://cognitolab.net/products/sitekeel
- * Description:       One timeline of what changed on your site - WordPress, WooCommerce and CognitoLab plugins - plus a home for connecting them.
- * Version:           0.1.0
+ * Description:       A plain-language timeline of what changed on your site: plugins, theme, pages, WooCommerce products and prices, promo bars and banners.
+ * Version:           1.0.0
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            CognitoLab
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SKEEL_VERSION', '0.1.0' );
+define( 'SKEEL_VERSION', '1.0.0' );
 define( 'SKEEL_PLUGIN_FILE', __FILE__ );
 define( 'SKEEL_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SKEEL_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -32,6 +32,9 @@ require_once SKEEL_PLUGIN_DIR . 'lib/cognitolab-journal/loader.php';
 cljournal_register_consumer( 'sitekeel' );
 
 require_once SKEEL_PLUGIN_DIR . 'includes/describe.php';
+require_once SKEEL_PLUGIN_DIR . 'includes/importance.php';
+require_once SKEEL_PLUGIN_DIR . 'includes/ai-status.php';
+require_once SKEEL_PLUGIN_DIR . 'includes/dashboard.php';
 require_once SKEEL_PLUGIN_DIR . 'includes/portfolio.php';
 require_once SKEEL_PLUGIN_DIR . 'includes/admin-page.php';
 

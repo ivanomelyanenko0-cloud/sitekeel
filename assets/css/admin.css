@@ -36,3 +36,32 @@
 .skeel-pager .button + .button {
 	margin-left: 8px;
 }
+
+.skeel-widget {
+	margin: 0;
+}
+
+.skeel-widget li {
+	margin-bottom: 6px;
+}
+
+.skeel-widget-when {
+	display: inline-block;
+	min-width: 70px;
+	color: #646970;
+}
+
+.skeel-widget .skeel-important strong,
+.skeel-timeline .skeel-important td:nth-child(3) {
+	color: #b32d2e;
+}
+
+.skeel-ai {
+	padding: 8px 12px;
+	border-left: 4px solid #c3c4c7;
+	background: #fff;
+	max-width: 900px;
+}
+
+.skeel-ai-ready { border-left-color: #00a32a; }
+.skeel-ai-no_connector { border-left-color: #dba617; }
