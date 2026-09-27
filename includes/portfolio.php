@@ -48,9 +48,9 @@ function skeel_portfolio_registry() {
 			'file'       => 'tillkeeper/tillkeeper.php',
 			'constant'   => 'TLKP_VERSION',
 			'pro_file'   => 'tillkeeper-pro/tillkeeper-pro.php',
-			'pro_fs'     => '',
+			'pro_fs'     => 'tlkp_fs',
 			'visibility' => 'observed',
-			'summary'    => __( 'Changes made by AI agents (with Tillkeeper Pro).', 'sitekeel' ),
+			'summary'    => __( 'Changes made by AI agents through store abilities.', 'sitekeel' ),
 		),
 		'fettle'                       => array(
 			'name'       => 'Fettle',
