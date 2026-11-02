@@ -1,6 +1,6 @@
 === Sitekeel ===
 Contributors: lukystile
-Tags: activity log, change log, timeline, woocommerce, audit
+Tags: activity log, audit log, change log, woocommerce, timeline
 Requires at least: 6.3
 Tested up to: 7.1
 Stable tag: 1.0.0
@@ -8,11 +8,11 @@ Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-A plain-language timeline of what changed on your site: plugins, theme, pages, WooCommerce products and prices, promo bars and banners.
+Activity log for WordPress and WooCommerce: a plain-language timeline of plugin, theme, page, product, price and stock changes, and who made them.
 
 == Description ==
 
-When something on a site suddenly looks different, sells less or breaks, the first question is always "what changed?". Sitekeel answers it with one readable timeline:
+When something on a site suddenly looks different, sells less or breaks, the first question is always "what changed?". **Sitekeel** is an activity log and change log for WordPress and WooCommerce that answers it with one readable timeline:
 
 * **WordPress:** plugins activated, deactivated or updated, theme switched or updated, WordPress updated, pages published or taken offline.
 * **WooCommerce:** products published or taken offline, price, sale price and stock status changes.
@@ -49,6 +49,10 @@ This plugin does not connect to any external service. Everything is recorded and
 2. Open **Sitekeel** in the admin menu, or look at the **Recent site changes** widget on the dashboard.
 
 == Frequently Asked Questions ==
+
+= How do I see who changed what on my WordPress site? =
+
+Activate Sitekeel and open **Sitekeel** in the admin menu. From then on, plugin, theme and page changes and WooCommerce product, price and stock changes appear in the timeline with the user who made it, or "System" for automatic updates. The latest changes are also on the **Recent site changes** dashboard widget.
 
 = Does it record changes made before it was installed? =
 
