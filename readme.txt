@@ -16,7 +16,7 @@ When something on a site suddenly looks different, sells less or breaks, the fir
 
 * **WordPress:** plugins activated, deactivated or updated, theme switched or updated, WordPress updated, pages published or taken offline.
 * **WooCommerce:** products published or taken offline, price, sale price and stock status changes.
-* **Promotions and more, when those plugins are active:** Heralda bars turned on or off, rescheduled or retargeted; ProofBlocks banners, counters and pricing tables added to or removed from live pages; Watermark Guru setting changes; changes AI agents made through Tillkeeper.
+* **Promotions and more, when those plugins are active:** Heralda bars turned on or off, rescheduled or retargeted; ProofBlocks banners, counters and pricing tables added to or removed from live pages; Filigrane setting changes; changes AI agents made through Tillkeeper.
 * **Important changes stand out.** Filter the timeline to the changes that can take a promotion, a product or the whole shop offline, and see them marked on the dashboard widget.
 * **Who did it.** Every change shows the user who made it, or "System" for automatic updates.
 * **Portfolio screen.** See which CognitoLab plugins are active, what the timeline can see from each, and whether the WordPress AI Client is ready for plugins that use AI.

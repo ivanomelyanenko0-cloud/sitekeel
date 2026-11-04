@@ -33,7 +33,7 @@ function skeel_ai_status() {
 function skeel_render_ai_status() {
 	$status = skeel_ai_status();
 	$texts  = array(
-		'ready'        => __( 'Ready: an AI connector is set up under Settings > Connectors. Fettle, IntelliDesc and Watermark Guru Pro can use it without their own API keys.', 'sitekeel' ),
+		'ready'        => __( 'Ready: an AI connector is set up under Settings > Connectors. Fettle, IntelliDesc and Filigrane Pro can use it without their own API keys.', 'sitekeel' ),
 		'no_connector' => __( 'Available, but no AI connector is set up yet. Add one under Settings > Connectors to let CognitoLab plugins share it.', 'sitekeel' ),
 		'unavailable'  => __( 'Not available on this site (WordPress 7.0 or later with AI enabled is needed). Plugins that use AI fall back to their own API key settings.', 'sitekeel' ),
 	);

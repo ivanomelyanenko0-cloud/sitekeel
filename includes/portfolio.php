@@ -34,11 +34,11 @@ function skeel_portfolio_registry() {
 			'visibility' => 'observed',
 			'summary'    => __( 'Banners, counters and pricing tables added to or removed from live pages.', 'sitekeel' ),
 		),
-		'watermark-guru'               => array(
-			'name'       => 'Watermark Guru',
-			'file'       => 'watermark-guru/watermark-guru.php',
+		'filigrane'                    => array(
+			'name'       => 'Filigrane',
+			'file'       => 'filigrane/filigrane.php',
 			'constant'   => 'WMGURU_VERSION',
-			'pro_file'   => 'watermark-guru-pro/watermark-guru-pro.php',
+			'pro_file'   => 'filigrane-pro/filigrane-pro.php',
 			'pro_fs'     => 'wmguru_fs',
 			'visibility' => 'observed',
 			'summary'    => __( 'Watermark settings changes.', 'sitekeel' ),
