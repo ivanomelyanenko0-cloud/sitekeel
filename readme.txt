@@ -1,4 +1,4 @@
-=== Sitekeel ===
+=== Sitekeel – Activity Log & Audit Log with Plain-Language Timeline ===
 Contributors: lukystile
 Tags: activity log, audit log, change log, woocommerce, timeline
 Requires at least: 6.3

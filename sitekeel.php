@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Sitekeel
+ * Plugin Name:       Sitekeel – Activity Log & Audit Log with Plain-Language Timeline
  * Plugin URI:        https://cognitolab.net/products/sitekeel
  * Description:       A plain-language timeline of what changed on your site: plugins, theme, pages, WooCommerce products and prices, promo bars and banners.
  * Version:           1.0.0
