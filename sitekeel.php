@@ -13,8 +13,7 @@
  * Text Domain:       sitekeel
  * Domain Path:       /languages
  *
- * "Sitekeel" is a working name - every internal identifier lives behind the
- * SKEEL_/skeel_ prefix so a rename stays a mechanical find/replace. The shared
+ * Internal identifiers use the SKEEL_/skeel_ prefix. The shared
  * change journal uses the company prefix (cljournal_, 'cognitolab_journal_event')
  * so product renames never touch it.
  */
