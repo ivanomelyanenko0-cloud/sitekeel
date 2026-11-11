@@ -106,7 +106,7 @@ function skeel_render_timeline_tab() {
 	<p class="description">
 		<?php
 		/* translators: %d: number of days changes are kept. */
-		echo esc_html( sprintf( __( 'What changed on this site: WordPress, WooCommerce and CognitoLab plugins. No personal data is stored. Changes are kept for %d days.', 'sitekeel' ), skeel_retention_days() ) );
+		echo esc_html( sprintf( __( 'What changed on this site: WordPress, WooCommerce and CognitoLab plugins. No visitor data is stored. Changes are kept for %d days.', 'sitekeel' ), skeel_retention_days() ) );
 		?>
 	</p>
 
