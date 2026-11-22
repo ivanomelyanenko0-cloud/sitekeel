@@ -35,6 +35,7 @@ require_once SKEEL_PLUGIN_DIR . 'includes/importance.php';
 require_once SKEEL_PLUGIN_DIR . 'includes/ai-status.php';
 require_once SKEEL_PLUGIN_DIR . 'includes/dashboard.php';
 require_once SKEEL_PLUGIN_DIR . 'includes/portfolio.php';
+require_once SKEEL_PLUGIN_DIR . 'includes/settings.php';
 require_once SKEEL_PLUGIN_DIR . 'includes/admin-page.php';
 
 /**

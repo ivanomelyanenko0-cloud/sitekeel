@@ -19,17 +19,18 @@ When something on a site suddenly looks different, sells less or breaks, the fir
 * **Promotions and more, when those plugins are active:** Heralda bars turned on or off, rescheduled or retargeted; ProofBlocks banners, counters and pricing tables added to or removed from live pages; Filigrane setting changes; changes AI agents made through Tillkeeper.
 * **Important changes stand out.** Filter the timeline to the changes that can take a promotion, a product or the whole shop offline, and see them marked on the dashboard widget.
 * **Who did it.** Every change shows the user who made it, or "System" for automatic updates.
+* **Your history, as long as you want it.** Keep changes for 30 days, 90 days, 6 months, 1 year, 2 years, or keep everything.
 * **Portfolio screen.** See which CognitoLab plugins are active, what the timeline can see from each, and whether the WordPress AI Client is ready for plugins that use AI.
 
 Nothing needs setting up: activate the plugin and the timeline starts filling in.
 
 = Private and light =
 
-The timeline stores IDs, types and before/after values of settings only - never customer names, emails, addresses or order contents. Changes are collected in memory and written once at the end of the request, in a single query. Changes are kept for 90 days.
+The timeline stores IDs, types and before/after values of settings only - never customer names, emails, addresses or order contents. Changes are collected in memory and written once at the end of the request, in a single query. Changes are kept for 90 days by default; choose another period under **Sitekeel > Settings**.
 
 = Sitekeel Pro =
 
-[Sitekeel Pro](https://cognitolab.net/products/sitekeel) keeps changes for up to two years or for good, exports any filtered view as CSV, and emails you when an important change happens.
+[Sitekeel Pro](https://cognitolab.net/products/sitekeel) is a separate add-on that exports any filtered view as CSV and emails you when an important change happens.
 
 = For developers =
 
@@ -58,6 +59,10 @@ Activate Sitekeel and open **Sitekeel** in the admin menu. From then on, plugin,
 
 No. The timeline starts when the plugin is activated.
 
+= How long are changes kept? =
+
+90 days by default. Under **Sitekeel > Settings** you can choose 30 days, 6 months, 1 year, 2 years, or keep everything. Older changes are removed once a day.
+
 = Does it slow my site down? =
 
 No. Sitekeel only does work when something actually changes - for example when a product sells out during checkout. Changes are gathered in memory and written in one query at the end of the request, and old entries are cleaned up once a day. Visitors browsing the shop trigger nothing.
@@ -77,5 +82,6 @@ The timeline is shared with other CognitoLab plugins that use it, such as StoreW
 = 1.0.0 =
 * First public release.
 * Timeline of WordPress, WooCommerce and CognitoLab plugin changes, with source, period and "important only" filters.
+* Choose how long changes are kept, up to keeping everything.
 * Recent site changes dashboard widget.
 * Portfolio screen with WordPress AI status.
