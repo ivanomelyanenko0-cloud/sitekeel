@@ -15,6 +15,8 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 function skeel_uninstall_site() {
 	global $wpdb;
 
+	delete_option( 'skeel_settings' );
+
 	$consumers = get_option( 'cljournal_consumers', array() );
 	$consumers = array_values( array_diff( is_array( $consumers ) ? $consumers : array(), array( 'sitekeel' ) ) );
 

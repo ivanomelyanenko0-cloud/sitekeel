@@ -1,8 +1,8 @@
 <?php
 /**
  * Portfolio: which CognitoLab plugins are on this site and how the hub
- * sees them. Detection uses only each plugin's own version constant and
- * licensing function, so nothing here makes a plugin depend on the hub.
+ * sees them. Detection uses only the installed plugin list and each plugin's
+ * own version constant, so nothing here makes a plugin depend on the hub.
  *
  * @package Sitekeel
  */
@@ -21,7 +21,6 @@ function skeel_portfolio_registry() {
 			'file'       => 'heralda/heralda.php',
 			'constant'   => 'HRLD_VERSION',
 			'pro_file'   => 'heralda-pro/heralda-pro.php',
-			'pro_fs'     => 'hrld_fs',
 			'visibility' => 'observed',
 			'summary'    => __( 'Bars turned on/off, schedule, pages and button changes.', 'sitekeel' ),
 		),
@@ -30,7 +29,6 @@ function skeel_portfolio_registry() {
 			'file'       => 'proofblocks/proofblocks.php',
 			'constant'   => 'PRFBL_VERSION',
 			'pro_file'   => 'proofblocks-pro/proofblocks-pro.php',
-			'pro_fs'     => 'prfbl_fs',
 			'visibility' => 'observed',
 			'summary'    => __( 'Banners, counters and pricing tables added to or removed from live pages.', 'sitekeel' ),
 		),
@@ -39,7 +37,6 @@ function skeel_portfolio_registry() {
 			'file'       => 'filigrane/filigrane.php',
 			'constant'   => 'WMGURU_VERSION',
 			'pro_file'   => 'filigrane-pro/filigrane-pro.php',
-			'pro_fs'     => 'wmguru_fs',
 			'visibility' => 'observed',
 			'summary'    => __( 'Watermark settings changes.', 'sitekeel' ),
 		),
@@ -48,7 +45,6 @@ function skeel_portfolio_registry() {
 			'file'       => 'tillkeeper/tillkeeper.php',
 			'constant'   => 'TLKP_VERSION',
 			'pro_file'   => 'tillkeeper-pro/tillkeeper-pro.php',
-			'pro_fs'     => 'tlkp_fs',
 			'visibility' => 'observed',
 			'summary'    => __( 'Changes made by AI agents through store abilities.', 'sitekeel' ),
 		),
@@ -57,7 +53,6 @@ function skeel_portfolio_registry() {
 			'file'       => 'storewhy/storewhy.php',
 			'constant'   => 'STWY_VERSION',
 			'pro_file'   => 'storewhy-pro/storewhy-pro.php',
-			'pro_fs'     => 'stwyp_fs',
 			'visibility' => 'observed',
 			'summary'    => __( 'Shares the same change timeline; its sales dashboard shows these changes next to the numbers.', 'sitekeel' ),
 		),
@@ -66,7 +61,6 @@ function skeel_portfolio_registry() {
 			'file'       => 'fettle/fettle.php',
 			'constant'   => 'FETTLE_VERSION',
 			'pro_file'   => 'fettle-pro/fettle-pro.php',
-			'pro_fs'     => 'fettle_pro_fs',
 			'visibility' => 'needs_events',
 			'summary'    => __( 'Accessibility scans and regressions, once Fettle reports them.', 'sitekeel' ),
 		),
@@ -75,7 +69,6 @@ function skeel_portfolio_registry() {
 			'file'       => 'intellidesc-for-woocommerce/intellidesc-for-woocommerce.php',
 			'constant'   => '',
 			'pro_file'   => 'intellidesc-for-woocommerce-pro/intellidesc-for-woocommerce-pro.php',
-			'pro_fs'     => 'ildesc_fs',
 			'visibility' => 'needs_events',
 			'summary'    => __( 'AI-generated product descriptions, once IntelliDesc reports them.', 'sitekeel' ),
 		),
@@ -90,7 +83,7 @@ function skeel_portfolio_registry() {
 }
 
 /**
- * @return array[] Registry entries enriched with install/activation/license state.
+ * @return array[] Registry entries enriched with install, activation and edition state.
  */
 function skeel_portfolio_status() {
 	if ( ! function_exists( 'get_plugins' ) ) {
@@ -120,27 +113,8 @@ function skeel_portfolio_status() {
 		$item['installed']      = $free_installed || $pro_installed;
 		$item['active']         = $item['free_active'] || $item['pro_active'];
 		$item['version']        = $version;
-		$item['license']        = skeel_portfolio_license( $item );
+		$item['edition']        = $item['pro_active'] ? ( $item['free_active'] ? 'free_pro' : 'pro' ) : 'free';
 		$out[ $slug ]           = $item;
 	}
 	return $out;
-}
-
-/**
- * @param array $item Registry entry with pro_active set.
- * @return string 'none' | 'active' | 'inactive' | 'unknown'.
- */
-function skeel_portfolio_license( array $item ) {
-	if ( empty( $item['pro_active'] ) ) {
-		return 'none';
-	}
-	if ( '' === $item['pro_fs'] || ! function_exists( $item['pro_fs'] ) ) {
-		return 'unknown';
-	}
-
-	$fs = call_user_func( $item['pro_fs'] );
-	if ( ! is_object( $fs ) || ! method_exists( $fs, 'can_use_premium_code' ) ) {
-		return 'unknown';
-	}
-	return $fs->can_use_premium_code() ? 'active' : 'inactive';
 }

@@ -57,6 +57,7 @@ function skeel_render_admin_page() {
 		array(
 			'timeline'  => __( 'Timeline', 'sitekeel' ),
 			'portfolio' => __( 'Portfolio', 'sitekeel' ),
+			'settings'  => __( 'Settings', 'sitekeel' ),
 		)
 	);
 	if ( ! isset( $tabs[ $tab ] ) ) {
@@ -75,6 +76,8 @@ function skeel_render_admin_page() {
 			skeel_render_portfolio_tab();
 		} elseif ( 'timeline' === $tab ) {
 			skeel_render_timeline_tab();
+		} elseif ( 'settings' === $tab ) {
+			skeel_render_settings_tab();
 		} else {
 			do_action( 'skeel_render_tab_' . $tab );
 		}
@@ -105,9 +108,17 @@ function skeel_render_timeline_tab() {
 	?>
 	<p class="description">
 		<?php
-		/* translators: %d: number of days changes are kept. */
-		echo esc_html( sprintf( __( 'What changed on this site: WordPress, WooCommerce and CognitoLab plugins. No visitor data is stored. Changes are kept for %d days.', 'sitekeel' ), skeel_retention_days() ) );
+		esc_html_e( 'What changed on this site: WordPress, WooCommerce and CognitoLab plugins. No visitor data is stored.', 'sitekeel' );
+		echo ' ';
+		if ( 0 === skeel_retention_setting() ) {
+			esc_html_e( 'All changes are kept.', 'sitekeel' );
+		} else {
+			/* translators: %d: number of days changes are kept. */
+			echo esc_html( sprintf( _n( 'Changes are kept for %d day.', 'Changes are kept for %d days.', skeel_retention_days(), 'sitekeel' ), skeel_retention_days() ) );
+		}
+		echo ' ';
 		?>
+		<a href="<?php echo esc_url( add_query_arg( array( 'page' => 'sitekeel', 'tab' => 'settings' ), admin_url( 'admin.php' ) ) ); ?>"><?php esc_html_e( 'Change', 'sitekeel' ); ?></a>
 	</p>
 
 	<form method="get" class="skeel-filters">
@@ -127,7 +138,7 @@ function skeel_render_timeline_tab() {
 			<select name="days">
 				<?php foreach ( skeel_timeline_periods() as $d ) : ?>
 					<?php /* translators: %d: number of days. */ ?>
-					<option value="<?php echo esc_attr( (string) $d ); ?>" <?php selected( $days, $d ); ?>><?php echo esc_html( sprintf( _n( 'Last %d day', 'Last %d days', $d, 'sitekeel' ), $d ) ); ?></option>
+					<option value="<?php echo esc_attr( (string) $d ); ?>" <?php selected( $days, $d ); ?>><?php echo esc_html( 0 === $d ? __( 'All time', 'sitekeel' ) : sprintf( _n( 'Last %d day', 'Last %d days', $d, 'sitekeel' ), $d ) ); ?></option>
 				<?php endforeach; ?>
 			</select>
 		</label>
@@ -200,17 +211,24 @@ function skeel_retention_days() {
 }
 
 /**
- * @return int[] Periods offered in the timeline filter, never longer than the history kept.
+ * @return int[] Periods offered in the timeline filter, never longer than the
+ *               history kept. 0 means all time and is offered when more than
+ *               90 days are kept.
  */
 function skeel_timeline_periods() {
 	$keep    = skeel_retention_days();
-	$periods = array_filter(
-		array( 1, 7, 30, 90, 180, 365 ),
-		static function ( $d ) use ( $keep ) {
-			return $d <= $keep;
-		}
+	$periods = array_values(
+		array_filter(
+			array( 1, 7, 30, 90, 180, 365, 730 ),
+			static function ( $d ) use ( $keep ) {
+				return $d <= $keep;
+			}
+		)
 	);
-	return array_values( $periods );
+	if ( $keep > 90 ) {
+		$periods[] = 0;
+	}
+	return $periods;
 }
 
 /**
@@ -240,7 +258,7 @@ function skeel_timeline_filters() {
  */
 function skeel_timeline_query_args( array $filters, $limit, $offset = 0 ) {
 	return array(
-		'after'  => gmdate( 'Y-m-d H:i:s', time() - $filters['days'] * DAY_IN_SECONDS ),
+		'after'  => $filters['days'] ? gmdate( 'Y-m-d H:i:s', time() - $filters['days'] * DAY_IN_SECONDS ) : '',
 		'source' => $filters['source'],
 		'events' => $filters['important'] ? array_keys( skeel_important_events() ) : array(),
 		'limit'  => $limit,
@@ -264,11 +282,10 @@ function skeel_object_edit_link( array $row ) {
  * Portfolio tab.
  */
 function skeel_render_portfolio_tab() {
-	$license_labels = array(
-		'none'     => __( 'Free', 'sitekeel' ),
-		'active'   => __( 'Pro, licensed', 'sitekeel' ),
-		'inactive' => __( 'Pro, not licensed', 'sitekeel' ),
-		'unknown'  => __( 'Pro', 'sitekeel' ),
+	$edition_labels    = array(
+		'free'     => __( 'Free', 'sitekeel' ),
+		'free_pro' => __( 'Free + Pro', 'sitekeel' ),
+		'pro'      => __( 'Pro', 'sitekeel' ),
 	);
 	$visibility_labels = array(
 		'observed'     => __( 'Seen automatically', 'sitekeel' ),
@@ -308,7 +325,7 @@ function skeel_render_portfolio_tab() {
 						}
 						?>
 					</td>
-					<td><?php echo esc_html( $item['installed'] ? $license_labels[ $item['license'] ] : '—' ); ?></td>
+					<td><?php echo esc_html( $item['installed'] ? $edition_labels[ $item['edition'] ] : '—' ); ?></td>
 					<td>
 						<span class="skeel-vis skeel-vis-<?php echo esc_attr( $item['visibility'] ); ?>"><?php echo esc_html( $visibility_labels[ $item['visibility'] ] ); ?></span>
 						<br /><span class="description"><?php echo esc_html( $item['summary'] ); ?></span>
